@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simulation — X-DIMENSION NASA</title>
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="main.css" />
+  <link rel="stylesheet" href="simulacion.css" />
+
+  <!-- Three.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/controls/OrbitControls.js" defer></script>
+
+  <!-- JS -->
+  <script src="simulacion.js" defer></script>
+</head>
+
+<body>
+  <!-- -------------------- SIMULATION / HUD -------------------- -->
+  <div id="viewport">
+    <canvas id="scene-canvas" aria-label="Spacecraft sensor vision" role="img"></canvas>
+
+    <div id="hud" aria-hidden="false">
+      <!-- Central reticle -->
+      <div class="reticle" aria-hidden="true">
+        <div class="reticle-ring"></div>
+        <div class="reticle-dot"></div>
+      </div>
+
+      <!-- Top telemetry -->
+      <div class="telemetry top-bar" role="status" aria-live="polite">
+        <div class="telemetry-left">
+          <span class="brand">X-<strong>DIMENSION</strong> <span class="nasa-badge">NASA MODE</span></span>
+          <span class="mission">Mission: LEO-Clean • Mode: Autonomous Sweep</span>
+        </div>
+        <div class="telemetry-right">
+          <span id="telemetry-time">T+ 00:00:00</span>
+          <span id="telemetry-alt">Alt: — km</span>
+          <span id="telemetry-speed">Vel: — km/s</span>
+          <span id="nasa-counter" class="nasa-counter" style="display: none;">NASA: 0</span>
+        </div>
+      </div>
+
+      <!-- Left panel: detections -->
+      <aside id="panel-targets" class="panel left" aria-label="Detected objects">
+        <header>
+          <h3>🚀 Detected Objects</h3>
+          <div class="panel-controls">
+            <button id="btn-filter" title="Filter hazards" aria-pressed="false">Filter Hazards</button>
+            <button id="btn-clear" title="Clear list">Clear All</button>
+            <button id="btn-nasa-mode" title="NASA Real Data" class="nasa-mode-btn">NASA Data</button>
+          </div>
+        </header>
+        <div class="panel-status">
+          <span id="data-source" class="data-source">Simulation Data</span>
+          <span id="object-count" class="object-count">Objects: 0</span>
+        </div>
+        <ul id="targets-list" class="targets">
+          <li class="empty">No detections — start simulation</li>
+        </ul>
+        <div class="panel-footer">
+          <div class="efficiency-meter">
+            <span>Capture Efficiency</span>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 0%"></div>
+            </div>
+            <span id="efficiency-value">0%</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right panel: modules -->
+      <aside id="panel-modules" class="panel right" aria-label="Active modules">
+        <header>
+          <h3>🛰️ Active Modules</h3>
+          <div class="connection-status">
+            <span id="nasa-status" class="status-offline">NASA: OFFLINE</span>
+          </div>
+        </header>
+        <ul class="modules">
+          <li class="module active">LIDAR Sensor • <span class="status-online">ONLINE</span></li>
+          <li class="module">Optical Vision • <span class="status-online">ONLINE</span></li>
+          <li class="module">Net Launcher • <span class="status-standby">STANDBY</span></li>
+          <li class="module">Electrostatic Tractor • <span class="status-ready">READY</span></li>
+          <li class="module nasa-module">NASA Data Feed • <span class="status-offline">OFFLINE</span></li>
+        </ul>
+        
+        <div class="capture-controls">
+          <button id="btn-capture" class="primary">🎯 Initiate Capture</button>
+          <button id="btn-scan">📡 Deep Scan</button>
+          <button id="btn-nasa-data" class="nasa-btn">🚀 Load NASA Data</button>
+        </div>
+        
+        <div class="mission-info">
+          <h4>Current Mission</h4>
+          <div id="mission-display" class="mission-display">
+            <div class="mission-title">Orbital Debris Cleanup</div>
+            <div class="mission-progress">
+              <div class="progress-bar nasa-progress">
+                <div class="progress-fill" style="width: 0%"></div>
+              </div>
+              <span>0% Complete</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Bottom status -->
+      <div class="status-bottom" aria-live="polite">
+        <div class="status-left">
+          <span id="status-msg">Status: Initializing systems...</span>
+          <span id="score-display" class="score-display">Score: 0</span>
+        </div>
+        <div class="status-right">
+          <span class="resource-indicator">
+            ⚡ Energy: <strong id="energy">100%</strong>
+          </span>
+          <span class="resource-indicator">
+            🕸️ Net Ammo: <strong id="net-count">6</strong>
+          </span>
+          <span class="resource-indicator">
+            🎯 Targets: <strong id="targets-count">0</strong>
+          </span>
+          <span class="resource-indicator nasa-resource">
+            🌍 NASA Objects: <strong id="nasa-objects">0</strong>
+          </span>
+        </div>
+      </div>
+
+      <!-- Notification Container -->
+      <div id="notification-container" class="notification-container"></div>
+
+      <!-- Overlay SVG -->
+      <svg id="overlay-svg" aria-hidden="true" class="overlay-svg"></svg>
+    </div>
+  </div>
+
+  <!-- Back to home button -->
+  <div class="back-nav">
+    <a href="index.html" class="btn back-btn">← Back to Mission Control</a>
+  </div>
+
+  <!-- NASA Data Modal (hidden by default) -->
+  <div id="nasa-modal" class="nasa-modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>🚀 NASA Near-Earth Objects</h3>
+        <button id="close-nasa-modal" class="close-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="nasa-stats">
+          <div class="stat-item">
+            <span class="stat-label">Total Objects</span>
+            <span id="nasa-total" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Potentially Hazardous</span>
+            <span id="nasa-hazardous" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Avg. Velocity</span>
+            <span id="nasa-velocity" class="stat-value">0 km/s</span>
+          </div>
+        </div>
+        <div class="nasa-description">
+          <p>Real-time data from NASA's Near-Earth Object Program. These are actual objects currently being tracked by space agencies.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="load-nasa-data" class="nasa-btn primary">Load NASA Data</button>
+        <button id="use-simulation-data" class="secondary">Use Simulation Data</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loading-content">
+      <div class="logo">X-<span>DIMENSION</span></div>
+      <div class="loading-text">INITIALIZING ORBITAL SIMULATION</div>
+      <div class="loading-progress">
+        <div class="progress-bar">
+          <div class="progress-fill" id="loading-progress"></div>
+        </div>
+        <div class="progress-text" id="progress-text">0%</div>
+      </div>
+      <div class="loading-steps">
+        <div class="step" id="step-1">✓ Loading core systems</div>
+        <div class="step" id="step-2">⏳ Initializing 3D engine</div>
+        <div class="step" id="step-3">⏳ Connecting to NASA API</div>
+        <div class="step" id="step-4">⏳ Starting simulation</div>
+      </div>
+      <div class="loading-subtext" id="loading-subtext">Initializing...</div>
+      <button id="skip-loading" class="skip-btn" style="display: none;">Skip Loading</button>
+    </div>
+  </div>
+
+  <!-- Instructions Modal -->
+  <div id="instructions-modal" class="instructions-modal" style="display: none;">
+    <div class="instructions-content">
+      <div class="instructions-header">
+        <h2>🚀 X-DIMENSION SIMULATION</h2>
+        <p class="instructions-subtitle">Orbital Debris Cleanup Mission</p>
+      </div>
+
+      <div class="instructions-sections">
+        <!-- Objetivo del Juego -->
+        <div class="instruction-section">
+          <h3>🎯 Mission Objective</h3>
+          <p>Your mission is to clean up orbital debris while protecting valuable satellites. Capture debris objects before they cause collisions in Low Earth Orbit.</p>
+          
+          <div class="important-note">
+            <h4>⚠️ CRITICAL MISSION</h4>
+            <p>Each successful capture earns points. Hazardous objects are worth more but harder to capture. NASA objects provide bonus rewards!</p>
+          </div>
+        </div>
+
+        <!-- Controles -->
+        <div class="instruction-section">
+          <h3>🎮 Controls</h3>
+          <div class="instruction-grid">
+            <div class="instruction-item">
+              <div class="instruction-icon">🎯</div>
+              <div class="instruction-text">
+                <strong>CAPTURE MODE</strong>
+                <span>Enter targeting mode to capture debris</span>
+                <div class="shortcut-keys">
+                  <kbd class="shortcut-key">C</kbd>
+                  <kbd class="shortcut-key">SPACE</kbd>
+                </div>
+              </div>
+            </div>
+            <div class="instruction-item">
+              <div class="instruction-icon">📡</div>
+              <div class="instruction-text">
+                <strong>DEEP SCAN</strong>
+                <span>Reveal all hidden objects (costs energy)</span>
+                <div class="shortcut-keys">
+                  <kbd class="shortcut-key">S</kbd>
+                </div>
+              </div>
+            </div>
+            <div class="instruction-item">
+              <div class="instruction-icon">🚀</div>
+              <div class="instruction-text">
+                <strong>NASA DATA</strong>
+                <span>Load real NASA object data</span>
+                <div class="shortcut-keys">
+                  <kbd class="shortcut-key">N</kbd>
+                </div>
+              </div>
+            </div>
+            <div class="instruction-item">
+              <div class="instruction-icon">🔍</div>
+              <div class="instruction-text">
+                <strong>FILTER HAZARDS</strong>
+                <span>Show only dangerous objects</span>
+                <div class="shortcut-keys">
+                  <kbd class="shortcut-key">F</kbd>
+                </div>
+              </div>
+            </div>
+            <div class="instruction-item">
+              <div class="instruction-icon">🌐</div>
+              <div class="instruction-text">
+                <strong>3D/2D VIEW</strong>
+                <span>Toggle between 3D and 2D views</span>
+                <div class="shortcut-keys">
+                  <kbd class="shortcut-key">1</kbd>
+                  <kbd class="shortcut-key">2</kbd>
+                </div>
+              </div>
+            </div>
+            <div class="instruction-item">
+              <div class="instruction-icon">❓</div>
+              <div class="instruction-text">
+                <strong>HELP</strong>
+                <span>Show this instructions panel</span>
+                <div class="shortcut-keys">
+                  <kbd class="shortcut-key">H</kbd>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tipos de Objetivos -->
+        <div class="instruction-section">
+          <h3>🛰️ Target Types</h3>
+          <div class="target-types">
+            <div class="target-type small">
+              <div class="target-color"></div>
+              <h4>Small Debris</h4>
+              <p>Low Risk • Easy Capture</p>
+              <p class="target-value">Value: 100 pts</p>
+            </div>
+            <div class="target-type medium">
+              <div class="target-color"></div>
+              <h4>Medium Debris</h4>
+              <p>Medium Risk • Moderate Capture</p>
+              <p class="target-value">Value: 200 pts</p>
+            </div>
+            <div class="target-type large">
+              <div class="target-color"></div>
+              <h4>Large Debris</h4>
+              <p>High Risk • Hard Capture</p>
+              <p class="target-value">Value: 500 pts</p>
+            </div>
+            <div class="target-type nasa">
+              <div class="target-color"></div>
+              <h4>NASA Objects</h4>
+              <p>Real Data • Special Rewards</p>
+              <p class="target-value">Value: 200-800 pts</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recursos y Energía -->
+        <div class="instruction-section">
+          <h3>⚡ Resources & Energy</h3>
+          <div class="instruction-grid">
+            <div class="instruction-item">
+              <div class="instruction-icon">⚡</div>
+              <div class="instruction-text">
+                <strong>ENERGY SYSTEM</strong>
+                <span>Slowly depletes over time. Scanning costs 10 energy. Critical below 10%.</span>
+              </div>
+            </div>
+            <div class="instruction-item">
+              <div class="instruction-icon">🕸️</div>
+              <div class="instruction-text">
+                <strong>NET AMMO</strong>
+                <span>Limited capture attempts. Auto-replenishes when low.</span>
+              </div>
+            </div>
+            <div class="instruction-item">
+              <div class="instruction-icon">📊</div>
+              <div class="instruction-text">
+                <strong>EFFICIENCY</strong>
+                <span>Based on successful captures vs attempts. Higher efficiency = better rewards.</span>
+              </div>
+            </div>
+            <div class="instruction-item">
+              <div class="instruction-icon">🔄</div>
+              <div class="instruction-text">
+                <strong>AUTO-REFILL</strong>
+                <span>Systems automatically replenish when resources are critically low.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estrategias -->
+        <div class="instruction-section">
+          <h3>🏆 Pro Tips</h3>
+          <div class="instruction-grid">
+            <div class="instruction-item">
+              <div class="instruction-icon">🎯</div>
+              <div class="instruction-text">
+                <strong>PRECISION MATTERS</strong>
+                <span>Aim carefully - missed shots waste nets and reduce efficiency.</span>
+              </div>
+            </div>
+            <div class="instruction-item">
+              <div class="instruction-icon">📡</div>
+              <div class="instruction-text">
+                <strong>SCAN STRATEGICALLY</strong>
+                <span>Use scans when many objects are hidden or to find high-value targets.</span>
+              </div>
+            </div>
+            <div class="instruction-item">
+              <div class="instruction-icon">🚀</div>
+              <div class="instruction-text">
+                <strong>NASA BONUS</strong>
+                <span>NASA objects give extra points and energy. Prioritize them!</span>
+              </div>
+            </div>
+            <div class="instruction-item">
+              <div class="instruction-icon">⏱️</div>
+              <div class="instruction-text">
+                <strong>MANAGE COOLDOWNS</strong>
+                <span>Scan has 5-second cooldown. Plan your actions efficiently.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="instructions-footer">
+        <div class="quick-start">
+          <h4>🚀 QUICK START</h4>
+          <p>1. Press <kbd>C</kbd> to enter capture mode<br>
+            2. Click on debris objects to capture them<br>
+            3. Use <kbd>S</kbd> to scan for hidden objects<br>
+            4. Press <kbd>N</kbd> to load real NASA data</p>
+        </div>
+        <div class="instruction-buttons">
+          <button id="start-playing" class="btn primary">Start Playing!</button>
+          <button id="close-instructions" class="btn btn-secondary">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help Button -->
+  <button id="help-button" class="help-button" style="display: none;">
+    ?<div class="key-indicator">H</div>
+  </button>
+
+  <!-- Audio Elements -->
+  <audio id="capture-sound" preload="auto">
+    <source src="Assets/Sounds/capture.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="scan-sound" preload="auto">
+    <source src="Assets/Sounds/scan.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="nasa-sound" preload="auto">
+    <source src="Assets/Sounds/nasa.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- NASA Attribution -->
+  <div class="nasa-attribution-bottom">
+    <span>Data provided by NASA JPL Small-Body Database</span>
+  </div>
+</body>
+</html>

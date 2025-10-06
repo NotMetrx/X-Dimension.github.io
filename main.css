@@ -1,0 +1,722 @@
+  /* ===================================================
+    X-DIMENSION — Estilo Futurista Espacial
+    Autor: v.0.1 — diseñado para simulación orbital / IA
+  =================================================== */
+
+  /* -------------------- Variables globales -------------------- */
+  :root {
+    --bg-space: radial-gradient(circle at 50% 50%, #000015 0%, #010824 80%);
+    --hud-accent: #00f0ff;
+    --hud-accent2: #1affd5;
+    --text-main: #e3f6ff;
+    --text-muted: #7aa0b9;
+    --panel-bg: rgba(2, 10, 30, 0.65);
+    --border-glow: 0 0 10px rgba(0, 240, 255, 0.5);
+    --blur: blur(10px);
+    --radius: 10px;
+    --transition: 0.3s ease;
+    --font-hud: 'Orbitron', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  /* ==================== VIDEO DE FONDO ==================== */
+  .video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+  }
+
+  .video-background video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.4) contrast(1.2);
+  }
+
+  .video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      45deg,
+      rgba(0, 5, 15, 0.7) 0%,
+      rgba(1, 8, 36, 0.6) 50%,
+      rgba(0, 5, 15, 0.7) 100%
+    );
+    z-index: 1;
+  }
+
+  .video-fallback {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, #000015 0%, #010824 80%);
+    display: none;
+  }
+
+  /* Si el video no carga, mostrar el fallback */
+  .video-background.video-error .video-fallback {
+    display: block;
+  }
+
+  .video-background.video-error video {
+    display: none;
+  }
+
+  /* -------------------- Base -------------------- */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: transparent;
+    color: var(--text-main);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  a {
+    color: var(--hud-accent);
+    text-decoration: none;
+  }
+  a:hover { text-decoration: underline; }
+
+  /* ---------------- NAVBAR PRINCIPAL ---------------- */
+  .nav-3d {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(4, 10, 25, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 255, 255, 0.15);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .nav-3d:hover {
+    background: rgba(4, 20, 40, 0.9);
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.25);
+  }
+
+  /* Contenedor interno */
+  .nav-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+  }
+
+  /* LOGO */
+  .nav-inner .logo {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 800;
+    color: #00eaff;
+    font-size: 1.4rem;
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 10px rgba(0, 234, 255, 0.8);
+    cursor: pointer;
+    transition: transform 0.3s ease, text-shadow 0.3s ease;
+  }
+
+  .nav-inner .logo span {
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+  }
+
+  .nav-inner .logo:hover {
+    transform: scale(1.08);
+    text-shadow: 0 0 15px rgba(0, 234, 255, 1);
+  }
+
+  /* Subtexto tipo "tagline" */
+  .tagline {
+    font-size: 0.8rem;
+    color: #9ecaff;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+  }
+
+  /* LINKS DE NAVEGACIÓN */
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Inter', sans-serif;
+    color: #e3f8ff;
+    text-decoration: none;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    position: relative;
+    transition: color 0.3s ease;
+  }
+
+  /* Efecto subrayado animado */
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(90deg, #00eaff, #ffffff);
+    transition: width 0.3s ease;
+    border-radius: 4px;
+  }
+
+  .nav-links a:hover {
+    color: #00eaff;
+  }
+
+  .nav-links a:hover::after {
+    width: 100%;
+  }
+
+  /* -------------------- Secciones principales -------------------- */
+  main {
+    position: relative;
+    z-index: 10;
+    background: transparent;
+    color: var(--text-main);
+    padding-top: 5rem;
+    min-height: 100vh;
+  }
+
+
+  .section {
+    padding: 3rem 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .section h2 {
+    font-family: var(--font-hud);
+    color: var(--hud-accent);
+    text-align: center;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 12px var(--hud-accent);
+  }
+
+  .section p, .section li {
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+  .grid article {
+    background: rgba(255,255,255,0.03);
+    padding: 1rem;
+    border-radius: var(--radius);
+    border: 1px solid rgba(0,255,255,0.1);
+  }
+
+  /* -------------------- Hero -------------------- */
+  .hero {
+    text-align: center;
+    background: transparent;
+    padding: 6rem 2rem;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+
+  /* -------------------- Hero Container CENTRADO -------------------- */
+  .hero-ct {
+    max-width: 800px;
+    width: 90%;
+    padding: 3rem 2rem;
+    background: rgba(2, 15, 35, 0.3); /* ← Cambia 0.7 por 0.3 (30% opacidad) */
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(0, 234, 255, 0.3);
+    border-radius: 20px;
+    box-shadow: 
+      0 0 50px rgba(0, 234, 255, 0.2),
+      inset 0 0 30px rgba(0, 234, 255, 0.1);
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    
+  }
+
+
+  /* Efecto de brillo en los bordes */
+  .hero-ct::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, 
+      rgba(0, 0, 0, 0.4), 
+      rgba(0, 0, 0, 0.4), 
+      rgba(0, 0, 0, 0.4));
+    border-radius: 22px;
+    z-index: -1;
+    animation: border-glow 3s ease-in-out infinite alternate;
+  }
+
+  @keyframes border-glow {
+    0% {
+      opacity: 0.3;
+    }
+    100% {
+      opacity: 0.7;
+    }
+  }
+
+  /* ----------- TITULO PRINCIPAL (Hero) ----------- */
+  .hero h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2rem, 3.3vw, 4rem);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+    color: #00eaff;
+    text-shadow: 
+      0 0 15px rgba(0, 234, 255, 0.9),
+      0 0 25px rgba(0, 234, 255, 0.7),
+      0 0 50px rgba(0, 234, 255, 0.5);
+    margin-bottom: 0.5em;
+    animation: title-glow 3s ease-in-out infinite alternate;
+  }
+
+
+  /* Efecto animado de brillo */
+  @keyframes title-glow {
+    0% {
+      text-shadow: 
+        0 0 10px rgba(0, 234, 255, 0.8),
+        0 0 20px rgba(0, 234, 255, 0.6);
+    }
+    100% {
+      text-shadow: 
+        0 0 20px rgba(0, 234, 255, 1),
+        0 0 40px rgba(0, 234, 255, 0.9),
+        0 0 60px rgba(0, 234, 255, 0.8);
+    }
+  }
+
+  /* Subtexto del hero */
+  .hero .lead {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    color: #e3f6ff;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 2em auto;
+    line-height: 1.6;
+    opacity: 0.9;
+    text-shadow: 0 0 10px rgba(0, 234, 255, 0.3);
+  }
+
+  .hero p.lead {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+  }
+
+  /* -------------------- Botones del Hero -------------------- */
+  .hero-ctas {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+
+  .hero-ctas .btn {
+    margin: 0.5rem;
+    flex: 0 1 auto;
+  }
+
+  /* -------------------- Botones globales -------------------- */
+  .btn {
+    background: transparent;
+    border: 1px solid var(--hud-accent);
+    color: var(--text-main);
+    padding: 0.8rem 1.6rem;
+    border-radius: var(--radius);
+    font-family: var(--font-hud);
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-block;
+    text-align: center;
+    min-width: 160px;
+  }
+  .btn:hover {
+    background: var(--hud-accent);
+    color: #000;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 240, 255, 0.3);
+  }
+  .btn.primary {
+    background: var(--hud-accent);
+    color: #000;
+    font-weight: 700;
+  }
+
+  /* -------------------- Footer -------------------- */
+  .site-footer {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(0, 10, 30, 0.8);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    border-top: 1px solid rgba(0,255,255,0.2);
+  }
+
+  /* -------------------- Responsividad -------------------- */
+  @media (max-width: 768px) {
+    .nav-inner {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .nav-links {
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    main {
+      padding-top: 3rem;
+    }
+
+    .hero-ctas {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-ctas .btn {
+      width: 200px;
+      margin: 0.25rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero {
+      padding: 4rem 1rem;
+    }
+    
+    .hero h1 {
+      font-size: 1.8rem;
+    }
+    
+    .hero .lead {
+      font-size: 1rem;
+    }
+    
+    .btn {
+      padding: 0.7rem 1.2rem;
+      min-width: 140px;
+      font-size: 0.9rem;
+    }
+  }
+
+  /* ==================== VIDEO MODAL ==================== */
+  .video-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 5, 15, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    animation: modalFadeIn 0.3s ease-out;
+  }
+
+  @keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .modal-content {
+    background: rgba(2, 15, 35, 0.95);
+    border: 1px solid rgba(0, 234, 255, 0.4);
+    border-radius: 15px;
+    width: 90%;
+    max-width: 900px;
+    box-shadow: 
+      0 0 50px rgba(0, 234, 255, 0.3),
+      inset 0 0 30px rgba(0, 234, 255, 0.1);
+    overflow: hidden;
+    animation: modalSlideIn 0.3s ease-out;
+  }
+
+  @keyframes modalSlideIn {
+    from { 
+      opacity: 0;
+      transform: translateY(-20px) scale(0.95);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid rgba(0, 234, 255, 0.2);
+    background: rgba(1, 10, 25, 0.8);
+  }
+
+  .modal-header h3 {
+    font-family: var(--font-hud);
+    color: var(--hud-accent);
+    margin: 0;
+    font-size: 1.4rem;
+    text-shadow: 0 0 10px rgba(0, 234, 255, 0.7);
+  }
+
+  .close-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    font-size: 2rem;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+  }
+
+  .close-btn:hover {
+    background: rgba(255, 0, 0, 0.2);
+    color: #ff4444;
+    transform: rotate(90deg);
+  }
+
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+  }
+
+  .video-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .modal-footer {
+    padding: 1.5rem 2rem;
+    text-align: center;
+    border-top: 1px solid rgba(0, 234, 255, 0.2);
+    background: rgba(1, 10, 25, 0.6);
+  }
+
+  .modal-footer p {
+    color: var(--text-muted);
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  /* Estilo especial para el botón de video */
+  #watch-video-btn {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(0, 234, 255, 0.1), rgba(26, 255, 213, 0.1));
+    border: 1px solid rgba(0, 234, 255, 0.5);
+    box-shadow: 0 0 15px rgba(0, 234, 255, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  #watch-video-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(0, 234, 255, 0.4), 
+      transparent);
+    transition: left 0.5s ease;
+  }
+
+  #watch-video-btn:hover::before {
+    left: 100%;
+  }
+
+  #watch-video-btn:hover {
+    background: linear-gradient(135deg, rgba(0, 234, 255, 0.2), rgba(26, 255, 213, 0.2));
+    box-shadow: 0 0 20px rgba(0, 234, 255, 0.5);
+    transform: translateY(-3px);
+  }
+
+  /* Responsive adjustments for modal */
+  @media (max-width: 768px) {
+    .modal-content {
+      width: 95%;
+      margin: 1rem;
+    }
+    
+    .modal-header {
+      padding: 1rem 1.5rem;
+    }
+    
+    .modal-header h3 {
+      font-size: 1.2rem;
+    }
+    
+    .modal-footer {
+      padding: 1rem 1.5rem;
+    }
+  }
+
+  /* -------------------- Contact Section -------------------- */
+  .contact-section {
+    padding: 4rem 2rem;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .section-title {
+    font-family: var(--font-hud);
+    color: var(--hud-accent);
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 2.5rem;
+    text-shadow: 0 0 15px rgba(0, 234, 255, 0.7);
+  }
+
+  .contact-box {
+    background: rgba(2, 15, 35, 0.6);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(0, 234, 255, 0.3);
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 
+      0 0 50px rgba(0, 234, 255, 0.2),
+      inset 0 0 30px rgba(0, 234, 255, 0.1);
+  }
+
+  .contact-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .contact-header h3 {
+    font-family: var(--font-hud);
+    color: var(--hud-accent);
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+
+  .contact-header p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+  }
+
+  .contact-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+
+  .info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: rgba(1, 10, 25, 0.5);
+    border-radius: 10px;
+    border: 1px solid rgba(0, 234, 255, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .info-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 234, 255, 0.2);
+    border-color: rgba(0, 234, 255, 0.4);
+  }
+
+  .info-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  .info-content h4 {
+    font-family: var(--font-hud);
+    color: var(--hud-accent);
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+  }
+
+  .info-content p {
+    color: var(--text-main);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .info-content span {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  /* -------------------- Utilidades -------------------- */
+  .visually-hidden {
+    position: absolute !important;
+    height: 1px; width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap;
+  }
+
+  .back-nav {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1001;
+  }
+
+  .back-btn {
+    background: rgba(0, 10, 30, 0.8);
+    backdrop-filter: blur(10px);
+  }

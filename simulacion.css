@@ -1,0 +1,1958 @@
+/* ===================================================
+   X-DIMENSION HUD — Estilo Futurista Espacial MEJORADO
+   Estilos específicos para la simulación interactiva
+=================================================== */
+
+:root {
+    --bg-space: #000010;
+    --panel-bg: rgba(2, 10, 30, 0.85);
+    --text-main: #ffffff;
+    --text-muted: #a0a0c0;
+    --hud-accent: #00f0ff;
+    --hud-accent2: #1affd5;
+    --font-hud: 'Orbitron', monospace;
+    --font-ui: 'Inter', sans-serif;
+    --radius: 8px;
+    --transition: all 0.3s ease;
+    --blur: blur(10px);
+    --border-glow: 0 0 15px rgba(0, 240, 255, 0.3);
+}
+
+/* -------------------- Viewport / Scene -------------------- */
+#viewport {
+    position: fixed;
+    top: 0; 
+    left: 0;
+    width: 100vw; 
+    height: 100vh;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 20%, #001029, #000010);
+    cursor: crosshair;
+}
+
+#scene-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: transparent;
+}
+
+.aiming-mode {
+    cursor: crosshair;
+}
+
+/* -------------------- HUD Overlay -------------------- */
+#hud {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    color: var(--text-main);
+    font-family: var(--font-ui);
+}
+
+/* Retícula central mejorada */
+.reticle {
+    position: absolute;
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    width: 140px; 
+    height: 140px;
+    z-index: 100;
+}
+
+.reticle-ring {
+    width: 100%; 
+    height: 100%;
+    border: 1px solid var(--hud-accent);
+    border-radius: 50%;
+    animation: ringPulse 3s infinite ease-in-out;
+    box-shadow: var(--border-glow);
+}
+
+.reticle-dot {
+    width: 6px; 
+    height: 6px;
+    background: var(--hud-accent2);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--hud-accent);
+    position: absolute;
+}
+
+@keyframes ringPulse {
+    0%, 100% { 
+        transform: scale(1); 
+        opacity: 0.8; 
+    }
+    50% { 
+        transform: scale(1.2); 
+        opacity: 0.3; 
+    }
+}
+
+/* Telemetría superior mejorada */
+.telemetry {
+    position: absolute;
+    top: 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2rem;
+    font-family: var(--font-hud);
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    color: var(--hud-accent2);
+    text-shadow: 0 0 10px var(--hud-accent);
+    background: rgba(2, 10, 30, 0.7);
+    backdrop-filter: blur(5px);
+    padding: 0.5rem 2rem;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+    z-index: 50;
+}
+
+.telemetry .brand {
+    font-weight: 700;
+    color: var(--hud-accent);
+    font-size: 1rem;
+}
+
+.telemetry .mission {
+    color: var(--text-muted);
+    margin-left: 1rem;
+    font-size: 0.85rem;
+}
+
+.telemetry-right {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.telemetry-right span {
+    font-family: var(--font-hud);
+    font-weight: 400;
+}
+
+/* -------------------- Paneles laterales mejorados -------------------- */
+.panel {
+    position: absolute;
+    top: 4rem;
+    bottom: 3rem;
+    width: 320px;
+    background: var(--panel-bg);
+    backdrop-filter: var(--blur);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    border-radius: var(--radius);
+    box-shadow: var(--border-glow);
+    padding: 1rem;
+    overflow-y: auto;
+    pointer-events: all;
+    z-index: 40;
+    transition: var(--transition);
+}
+
+.panel:hover {
+    border-color: rgba(0, 255, 255, 0.4);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+}
+
+.panel h3 {
+    font-family: var(--font-hud);
+    color: var(--hud-accent);
+    text-align: center;
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px var(--hud-accent);
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.panel.left { 
+    left: 1rem; 
+}
+
+.panel.right { 
+    right: 1rem; 
+}
+
+.panel header {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+    padding-bottom: 0.5rem;
+}
+
+.panel-controls {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.panel-controls button {
+    padding: 0.3rem 0.6rem;
+    background: transparent;
+    color: var(--hud-accent);
+    border: 1px solid var(--hud-accent);
+    font-family: var(--font-hud);
+    cursor: pointer;
+    transition: var(--transition);
+    pointer-events: all;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+
+.panel-controls button:hover {
+    background: var(--hud-accent);
+    color: #000;
+    transform: translateY(-1px);
+}
+
+.panel-controls button[aria-pressed="true"] {
+    background: var(--hud-accent);
+    color: #000;
+    box-shadow: 0 0 10px var(--hud-accent);
+}
+
+/* Lista de objetivos mejorada */
+.targets {
+    list-style: none;
+    max-height: 300px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+}
+
+.target-item {
+    font-size: 0.8rem;
+    margin: 0.3rem 0;
+    padding: 0.5rem;
+    background: rgba(0, 255, 255, 0.05);
+    border-left: 3px solid var(--hud-accent);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    pointer-events: all;
+    font-family: var(--font-ui);
+}
+
+.target-item:hover {
+    background: rgba(0, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.target-item.selected {
+    background: rgba(26, 255, 213, 0.15);
+    border-left-color: var(--hud-accent2);
+    box-shadow: 0 0 10px rgba(26, 255, 213, 0.5);
+}
+
+.target-item.dangerous {
+    border-left-color: #ff4444;
+    background: rgba(255, 68, 68, 0.1);
+}
+
+.target-item.dangerous:hover {
+    background: rgba(255, 68, 68, 0.15);
+}
+
+.target-item.dangerous.selected {
+    background: rgba(255, 68, 68, 0.2);
+    border-left-color: #ff6a6a;
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+}
+
+.target-id {
+    font-weight: bold;
+    color: var(--hud-accent);
+    font-family: var(--font-hud);
+    font-size: 0.75rem;
+}
+
+.target-risk {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+}
+
+.target-value {
+    color: var(--hud-accent2);
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.captured {
+    color: #00ff00;
+    font-weight: bold;
+    font-size: 0.7rem;
+    font-family: var(--font-hud);
+    margin-top: 0.2rem;
+}
+
+.targets li.empty {
+    text-align: center;
+    color: var(--text-muted);
+    border: none;
+    padding: 1rem;
+    font-style: italic;
+    background: transparent;
+    cursor: default;
+}
+
+.targets li.empty:hover {
+    transform: none;
+    background: transparent;
+}
+
+/* -------------------- OBJETOS NASA ESPECIALES -------------------- */
+
+/* Objetos NASA en la lista */
+.target-item.nasa-object {
+    border-left: 3px solid #ff6a00;
+    background: rgba(255, 106, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.target-item.nasa-object::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 106, 0, 0.2), transparent);
+    animation: nasaShine 3s infinite;
+}
+
+@keyframes nasaShine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.target-item.nasa-object:hover {
+    background: rgba(255, 106, 0, 0.15);
+    border-left-color: #ff8c00;
+}
+
+.target-item.nasa-object.selected {
+    background: rgba(255, 106, 0, 0.2);
+    border-left-color: #ffa500;
+    box-shadow: 0 0 15px rgba(255, 106, 0, 0.4);
+}
+
+.nasa-name {
+    font-weight: bold;
+    color: #ff6a00;
+    font-size: 0.8rem;
+    font-family: var(--font-hud);
+    letter-spacing: 0.5px;
+}
+
+.nasa-diameter, .nasa-velocity {
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-family: var(--font-ui);
+}
+
+.hazard-warning {
+    color: #ff4444;
+    font-weight: bold;
+    font-size: 0.7rem;
+    animation: pulseWarning 2s infinite;
+    font-family: var(--font-hud);
+    background: rgba(255, 68, 68, 0.1);
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    display: inline-block;
+    margin-top: 0.2rem;
+}
+
+@keyframes pulseWarning {
+    0%, 100% { 
+        opacity: 1; 
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 0.7; 
+        transform: scale(1.05);
+    }
+}
+
+/* Botón NASA */
+.nasa-btn {
+    background: linear-gradient(45deg, #ff6a00, #ff8c00) !important;
+    border: 1px solid #ff6a00 !important;
+    color: #000 !important;
+    font-weight: bold !important;
+    box-shadow: 0 0 15px rgba(255, 106, 0, 0.7) !important;
+    position: relative;
+    overflow: hidden;
+    font-family: var(--font-hud) !important;
+    letter-spacing: 0.5px;
+}
+
+.nasa-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.nasa-btn:hover::before {
+    left: 100%;
+}
+
+.nasa-btn:hover {
+    background: linear-gradient(45deg, #ff8c00, #ffa500) !important;
+    box-shadow: 0 0 20px rgba(255, 106, 0, 0.9) !important;
+    transform: translateY(-2px) !important;
+}
+
+.nasa-btn:active {
+    transform: translateY(0) !important;
+}
+
+/* Modal de información NASA */
+.nasa-info-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    backdrop-filter: blur(5px);
+    animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+    }
+    to {
+        opacity: 1;
+        backdrop-filter: blur(5px);
+    }
+}
+
+.nasa-info-modal .modal-content {
+    background: var(--panel-bg);
+    border: 2px solid #ff6a00;
+    border-radius: var(--radius);
+    padding: 2rem;
+    max-width: 500px;
+    width: 90%;
+    color: var(--text-main);
+    box-shadow: 0 0 30px rgba(255, 106, 0, 0.5);
+    position: relative;
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.nasa-info-modal .modal-content::before {
+    content: '🚀 NASA DATA';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ff6a00;
+    color: #000;
+    padding: 0.2rem 1rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    font-family: var(--font-hud);
+    letter-spacing: 1px;
+}
+
+.nasa-info-modal h3 {
+    color: #ff6a00;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-family: var(--font-hud);
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(255, 106, 0, 0.5);
+}
+
+.nasa-details {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.nasa-details p {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    font-family: var(--font-ui);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.3rem;
+}
+
+.nasa-details p:last-child {
+    border-bottom: none;
+}
+
+.nasa-details strong {
+    color: var(--hud-accent);
+    font-family: var(--font-hud);
+    font-weight: 600;
+}
+
+.hazard-yes {
+    color: #ff4444;
+    font-weight: bold;
+    background: rgba(255, 68, 68, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: var(--font-hud);
+}
+
+.hazard-no {
+    color: #00ff00;
+    font-weight: bold;
+    background: rgba(0, 255, 0, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: var(--font-hud);
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    gap: 1rem;
+}
+
+.close-modal {
+    background: transparent;
+    border: 1px solid #ff6a00;
+    color: #ff6a00;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: var(--transition);
+    font-family: var(--font-hud);
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    flex: 1;
+}
+
+.close-modal:hover {
+    background: #ff6a00;
+    color: #000;
+    transform: translateY(-1px);
+}
+
+.nasa-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #1affd5;
+    text-decoration: none;
+    font-size: 0.9rem;
+    border: 1px solid #1affd5;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    transition: var(--transition);
+    font-family: var(--font-hud);
+    letter-spacing: 0.5px;
+    flex: 1;
+    gap: 0.5rem;
+}
+
+.nasa-link::before {
+    content: '🌐';
+}
+
+.nasa-link:hover {
+    background: #1affd5;
+    color: #000;
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 0 15px rgba(26, 255, 213, 0.5);
+}
+
+/* -------------------- Módulos mejorados -------------------- */
+.modules {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.modules li {
+    font-size: 0.85rem;
+    margin: 0.3rem 0;
+    padding: 0.5rem;
+    background: rgba(0, 255, 255, 0.05);
+    border-left: 2px solid var(--hud-accent);
+    border-radius: 3px;
+    transition: all 0.3s ease;
+    font-family: var(--font-ui);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modules li:hover {
+    background: rgba(0, 255, 255, 0.1);
+    transform: translateX(3px);
+}
+
+.module.active {
+    border-left-color: #1affd5;
+    color: var(--hud-accent2);
+    background: rgba(26, 255, 213, 0.1);
+}
+
+.module.active::after {
+    content: '●';
+    color: #1affd5;
+    animation: pulseActive 1.5s infinite;
+    font-size: 0.8rem;
+}
+
+@keyframes pulseActive {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Controles de captura mejorados */
+.capture-controls {
+    margin-top: 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.capture-controls button {
+    pointer-events: all;
+    background: transparent;
+    border: 1px solid var(--hud-accent);
+    color: var(--text-main);
+    padding: 0.7rem 1.4rem;
+    font-family: var(--font-hud);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.capture-controls button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.capture-controls button:hover::before {
+    left: 100%;
+}
+
+.capture-controls button:hover {
+    background: var(--hud-accent);
+    color: #000;
+    transform: translateY(-2px);
+}
+
+.capture-controls .primary {
+    background: var(--hud-accent);
+    color: #000;
+    font-weight: bold;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+    border: 1px solid var(--hud-accent);
+}
+
+.capture-controls .primary:hover {
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.8);
+    transform: translateY(-2px);
+}
+
+.capture-controls .primary:active {
+    transform: translateY(0);
+}
+
+/* -------------------- Estado inferior mejorado -------------------- */
+.status-bottom {
+    position: absolute;
+    bottom: 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2rem;
+    font-family: var(--font-hud);
+    font-size: 0.9rem;
+    color: var(--hud-accent2);
+    background: rgba(2, 10, 30, 0.7);
+    backdrop-filter: blur(5px);
+    padding: 0.5rem 2rem;
+    border-top: 1px solid rgba(0, 255, 255, 0.2);
+    z-index: 50;
+}
+
+.status-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.status-right {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.status-right span {
+    font-family: var(--font-hud);
+    font-weight: 400;
+}
+
+.status-right strong {
+    color: var(--hud-accent);
+    font-weight: 700;
+}
+
+/* Indicadores de recursos */
+.resource-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* -------------------- Efectos de notificación -------------------- */
+.notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 20, 40, 0.9);
+    border: 2px solid var(--hud-accent);
+    padding: 2rem;
+    border-radius: var(--radius);
+    text-align: center;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+    animation: fadeInOut 3s ease-in-out;
+    font-family: var(--font-hud);
+    color: var(--hud-accent);
+}
+
+@keyframes fadeInOut {
+    0%, 100% { 
+        opacity: 0; 
+        transform: translate(-50%, -50%) scale(0.8); 
+    }
+    20%, 80% { 
+        opacity: 1; 
+        transform: translate(-50%, -50%) scale(1); 
+    }
+}
+
+/* NASA Notification */
+.nasa-notification {
+    border-color: #ff6a00;
+    box-shadow: 0 0 30px rgba(255, 106, 0, 0.5);
+    color: #ff6a00;
+    background: rgba(20, 10, 0, 0.9);
+}
+
+/* -------------------- Barra de progreso -------------------- */
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    margin: 0.5rem 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--hud-accent), var(--hud-accent2));
+    border-radius: 2px;
+    transition: width 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: progressShine 2s infinite;
+}
+
+@keyframes progressShine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* NASA Progress Bar */
+.nasa-progress {
+    background: linear-gradient(90deg, #ff6a00, #ff8c00);
+}
+
+.nasa-progress::after {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+}
+
+/* -------------------- Botón Volver -------------------- */
+.back-nav {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 100;
+    pointer-events: all;
+}
+
+.btn.back-btn {
+    background: rgba(2, 10, 30, 0.7);
+    backdrop-filter: blur(5px);
+    border: 1px solid var(--hud-accent);
+    color: var(--hud-accent);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-family: var(--font-hud);
+    font-size: 0.8rem;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    letter-spacing: 0.5px;
+}
+
+.btn.back-btn:hover {
+    background: var(--hud-accent);
+    color: #000;
+    transform: translateX(-3px);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+}
+
+/* -------------------- Overlay SVG -------------------- */
+.overlay-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* -------------------- Scrollbar personalizado -------------------- */
+.panel::-webkit-scrollbar {
+    width: 6px;
+}
+
+.panel::-webkit-scrollbar-track {
+    background: rgba(0, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.panel::-webkit-scrollbar-thumb {
+    background: var(--hud-accent);
+    border-radius: 3px;
+    transition: var(--transition);
+}
+
+.panel::-webkit-scrollbar-thumb:hover {
+    background: var(--hud-accent2);
+    box-shadow: 0 0 5px var(--hud-accent);
+}
+
+/* Scrollbar especial para paneles NASA */
+.panel.nasa-panel::-webkit-scrollbar-thumb {
+    background: #ff6a00;
+}
+
+.panel.nasa-panel::-webkit-scrollbar-thumb:hover {
+    background: #ff8c00;
+}
+
+/* -------------------- Responsividad mejorada -------------------- */
+@media (max-width: 1024px) {
+    .panel {
+        width: 280px;
+    }
+    
+    .telemetry {
+        font-size: 0.8rem;
+        padding: 0.4rem 1.5rem;
+    }
+    
+    .telemetry-right {
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .panel {
+        width: 250px;
+        top: 3rem;
+        bottom: 2.5rem;
+    }
+    
+    .panel.left, .panel.right {
+        position: relative;
+        left: auto;
+        right: auto;
+        width: 90%;
+        margin: 0 auto 1rem;
+        max-height: 200px;
+    }
+    
+    #hud {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .telemetry {
+        position: relative;
+        top: auto;
+        font-size: 0.7rem;
+        padding: 0.3rem 1rem;
+        flex-direction: column;
+        gap: 0.3rem;
+        text-align: center;
+    }
+    
+    .telemetry-right {
+        justify-content: center;
+    }
+    
+    .status-bottom {
+        position: relative;
+        bottom: auto;
+        font-size: 0.7rem;
+        padding: 0.3rem 1rem;
+        flex-direction: column;
+        gap: 0.3rem;
+        text-align: center;
+    }
+    
+    .capture-controls {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .capture-controls button {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .reticle {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .back-nav {
+        position: relative;
+        top: auto;
+        left: auto;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .panel {
+        width: 95%;
+        padding: 0.7rem;
+    }
+    
+    .telemetry {
+        font-size: 0.65rem;
+    }
+    
+    .status-bottom {
+        font-size: 0.65rem;
+    }
+    
+    .capture-controls {
+        flex-direction: column;
+    }
+    
+    .modal-buttons {
+        flex-direction: column;
+    }
+    
+    .nasa-info-modal .modal-content {
+        padding: 1.5rem;
+    }
+}
+
+/* -------------------- Estados especiales -------------------- */
+/* Modo de apuntado */
+.aiming-mode #hud {
+    cursor: crosshair;
+}
+
+.aiming-mode .target-item {
+    cursor: crosshair;
+}
+
+/* Modo bajo energía */
+.low-energy .status-bottom {
+    color: #ff4444;
+    border-top-color: rgba(255, 68, 68, 0.3);
+    animation: lowEnergyPulse 2s infinite;
+}
+
+@keyframes lowEnergyPulse {
+    0%, 100% { 
+        box-shadow: 0 0 0 rgba(255, 68, 68, 0); 
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(255, 68, 68, 0.3); 
+    }
+}
+
+/* Modo NASA activo */
+.nasa-mode .telemetry {
+    border-bottom-color: rgba(255, 106, 0, 0.3);
+}
+
+.nasa-mode .status-bottom {
+    border-top-color: rgba(255, 106, 0, 0.3);
+}
+
+/* -------------------- Utilidades -------------------- */
+.text-glow {
+    text-shadow: 0 0 10px currentColor;
+}
+
+.border-glow {
+    box-shadow: 0 0 15px currentColor;
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* -------------------- Estados de carga -------------------- */
+.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: loadingShine 1.5s infinite;
+}
+
+@keyframes loadingShine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* -------------------- Efectos de transición -------------------- */
+.fade-in {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.5s ease;
+}
+
+@keyframes slideInLeft {
+    from { 
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.slide-in-right {
+    animation: slideInRight 0.5s ease;
+}
+
+@keyframes slideInRight {
+    from { 
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* -------------------- Estilos de impresión -------------------- */
+@media print {
+    #hud, .back-nav {
+        display: none;
+    }
+    
+    #viewport {
+        position: relative;
+        background: white;
+    }
+}
+
+/* ==================== NUEVOS ESTILOS NASA ==================== */
+
+/* Badge NASA */
+.nasa-badge {
+    background: linear-gradient(45deg, #ff6a00, #ff8c00);
+    color: #000;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-left: 0.5rem;
+    animation: pulse 2s infinite;
+}
+
+/* Contador NASA */
+.nasa-counter {
+    background: rgba(255, 106, 0, 0.2);
+    border: 1px solid #ff6a00;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: var(--font-hud);
+}
+
+/* Panel Status */
+.panel-status {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.data-source {
+    color: var(--hud-accent);
+    font-weight: bold;
+}
+
+.data-source.nasa-active {
+    color: #ff6a00;
+    animation: pulse 2s infinite;
+}
+
+.object-count {
+    color: var(--text-muted);
+}
+
+/* Panel Footer */
+.panel-footer {
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.efficiency-meter {
+    text-align: center;
+}
+
+.efficiency-meter span {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+/* Connection Status */
+.connection-status {
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.status-online {
+    color: #00ff00;
+}
+
+.status-standby {
+    color: #ffff00;
+}
+
+.status-ready {
+    color: #00ffff;
+}
+
+.status-offline {
+    color: #ff4444;
+}
+
+.status-connecting {
+    color: #ff6a00;
+    animation: pulse 1.5s infinite;
+}
+
+/* NASA Module */
+.nasa-module {
+    border-left-color: #ff6a00 !important;
+}
+
+/* Mission Info */
+.mission-info {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.mission-info h4 {
+    color: var(--hud-accent);
+    font-family: var(--font-hud);
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.mission-display {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.5rem;
+    border-radius: var(--radius);
+}
+
+.mission-title {
+    font-size: 0.8rem;
+    color: var(--text-main);
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.mission-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mission-progress span {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    min-width: 60px;
+}
+
+/* Score Display */
+.score-display {
+    background: rgba(0, 255, 255, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    margin-left: 1rem;
+    font-family: var(--font-hud);
+    color: var(--hud-accent2);
+}
+
+/* NASA Resource */
+.nasa-resource {
+    color: #ff6a00 !important;
+}
+
+/* Notification Container */
+.notification-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    pointer-events: none;
+}
+
+/* NASA Modal */
+.nasa-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    backdrop-filter: blur(5px);
+}
+
+.nasa-modal .modal-content {
+    background: var(--panel-bg);
+    border: 2px solid #ff6a00;
+    border-radius: var(--radius);
+    padding: 0;
+    max-width: 500px;
+    width: 90%;
+    color: var(--text-main);
+    box-shadow: 0 0 30px rgba(255, 106, 0, 0.5);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 106, 0, 0.3);
+    background: rgba(255, 106, 0, 0.1);
+}
+
+.modal-header h3 {
+    color: #ff6a00;
+    margin: 0;
+    font-family: var(--font-hud);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* NASA Stats */
+.nasa-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.stat-item {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1rem;
+    border-radius: var(--radius);
+    border: 1px solid rgba(255, 106, 0, 0.2);
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.2rem;
+    color: #ff6a00;
+    font-family: var(--font-hud);
+    font-weight: bold;
+}
+
+/* Loading Screen */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-space);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    font-family: var(--font-hud);
+    color: var(--hud-accent);
+}
+
+.loading-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+}
+
+.loading-content .logo {
+    font-size: 3rem;
+    text-shadow: 0 0 20px var(--hud-accent);
+}
+
+.loading-text {
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+}
+
+.loading-progress {
+    width: 300px;
+}
+
+.loading-subtext {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.nasa-attribution {
+    margin-top: 2rem;
+    color: #ff6a00;
+    font-size: 0.8rem;
+}
+
+/* Help Modal */
+.help-modal .modal-content {
+    background: var(--panel-bg);
+    border: 2px solid var(--hud-accent);
+    border-radius: var(--radius);
+    padding: 0;
+    max-width: 400px;
+    width: 90%;
+}
+
+.shortcut-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.shortcut-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    background: rgba(0, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.shortcut-item.nasa-shortcut {
+    background: rgba(255, 106, 0, 0.1);
+    border-left: 3px solid #ff6a00;
+}
+
+.shortcut-item kbd {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    border: 1px solid var(--hud-accent);
+    font-family: var(--font-hud);
+    min-width: 30px;
+    text-align: center;
+}
+
+/* NASA Attribution Bottom */
+.nasa-attribution-bottom {
+    position: fixed;
+    bottom: 0.5rem;
+    right: 1rem;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    z-index: 100;
+}
+
+/* Botón Modo NASA */
+.nasa-mode-btn {
+    background: rgba(255, 106, 0, 0.2) !important;
+    border: 1px solid #ff6a00 !important;
+    color: #ff6a00 !important;
+}
+
+.nasa-mode-btn.active {
+    background: #ff6a00 !important;
+    color: #000 !important;
+}
+
+/* Estados responsive para nuevos elementos */
+@media (max-width: 768px) {
+    .nasa-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+    }
+    
+    .status-right {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .nasa-attribution-bottom {
+        position: relative;
+        text-align: center;
+        margin-top: 1rem;
+    }
+}
+
+/* Help Buttons */
+.help-buttons-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    z-index: 100;
+}
+
+.help-button {
+    background: rgba(2, 10, 30, 0.7);
+    backdrop-filter: blur(5px);
+    border: 1px solid var(--hud-accent);
+    color: var(--hud-accent);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-family: var(--font-hud);
+    font-size: 1.2rem;
+    transition: var(--transition);
+    position: relative;
+}
+
+.help-button:hover {
+    background: var(--hud-accent);
+    color: #000;
+    transform: scale(1.1);
+}
+
+.key-indicator {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    background: #ff6a00;
+    color: #000;
+    font-size: 0.6rem;
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    font-weight: bold;
+}
+
+/* Instructions Modal */
+.instructions-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    backdrop-filter: blur(5px);
+}
+
+.instructions-content {
+    background: var(--panel-bg);
+    border: 2px solid var(--hud-accent);
+    border-radius: var(--radius);
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    color: var(--text-main);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+}
+
+.instructions-header {
+    padding: 2rem;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+    text-align: center;
+    background: rgba(0, 255, 255, 0.05);
+}
+
+.instructions-header h2 {
+    color: var(--hud-accent);
+    font-family: var(--font-hud);
+    margin: 0 0 0.5rem 0;
+}
+
+.instructions-subtitle {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.instructions-sections {
+    padding: 2rem;
+}
+
+.instruction-section {
+    margin-bottom: 2rem;
+}
+
+.instruction-section h3 {
+    color: var(--hud-accent);
+    font-family: var(--font-hud);
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+    padding-bottom: 0.5rem;
+}
+
+.instruction-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.instruction-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(0, 255, 255, 0.05);
+    border-radius: var(--radius);
+    border-left: 3px solid var(--hud-accent);
+}
+
+.instruction-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.instruction-text {
+    flex: 1;
+}
+
+.instruction-text strong {
+    color: var(--hud-accent);
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+.instruction-text span {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.shortcut-keys {
+    display: flex;
+    gap: 0.3rem;
+}
+
+.shortcut-key {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--hud-accent);
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    font-family: var(--font-hud);
+    font-size: 0.8rem;
+    min-width: 25px;
+    text-align: center;
+}
+
+.important-note {
+    background: rgba(255, 68, 68, 0.1);
+    border: 1px solid #ff4444;
+    border-radius: var(--radius);
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.important-note h4 {
+    color: #ff4444;
+    margin: 0 0 0.5rem 0;
+    font-family: var(--font-hud);
+}
+
+.target-types {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.target-type {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(0, 255, 255, 0.05);
+    border-radius: var(--radius);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.target-color {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin: 0 auto 0.5rem;
+}
+
+.target-type.small .target-color {
+    background: rgba(250, 45, 13, 0.9);
+}
+
+.target-type.medium .target-color {
+    background: rgba(255, 100, 0, 0.9);
+}
+
+.target-type.large .target-color {
+    background: rgba(255, 0, 0, 0.9);
+}
+
+.target-type.nasa .target-color {
+    background: #ff6a00;
+}
+
+.target-type h4 {
+    color: var(--hud-accent);
+    margin: 0 0 0.5rem 0;
+    font-family: var(--font-hud);
+    font-size: 0.9rem;
+}
+
+.target-type p {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin: 0.2rem 0;
+}
+
+.target-value {
+    color: var(--hud-accent2) !important;
+    font-weight: bold;
+}
+
+.architecture-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.flow-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(0, 255, 255, 0.05);
+    border-radius: var(--radius);
+    border-left: 3px solid var(--hud-accent);
+}
+
+.flow-number {
+    background: var(--hud-accent);
+    color: #000;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-hud);
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.flow-content h4 {
+    color: var(--hud-accent);
+    margin: 0 0 0.5rem 0;
+    font-family: var(--font-hud);
+}
+
+.flow-content p {
+    color: var(--text-muted);
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.flow-content code {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: var(--hud-accent2);
+}
+
+.flow-content ul {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0;
+    padding-left: 1rem;
+}
+
+.tech-stack {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.tech-category h4 {
+    color: var(--hud-accent);
+    margin: 0 0 0.5rem 0;
+    font-family: var(--font-hud);
+    font-size: 0.9rem;
+}
+
+.tech-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tech-item {
+    background: rgba(0, 255, 255, 0.1);
+    color: var(--hud-accent2);
+    padding: 0.3rem 0.6rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+.algorithms-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.algorithm {
+    padding: 1rem;
+    background: rgba(0, 255, 255, 0.05);
+    border-radius: var(--radius);
+    border-left: 3px solid var(--hud-accent);
+}
+
+.algorithm h4 {
+    color: var(--hud-accent);
+    margin: 0 0 0.5rem 0;
+    font-family: var(--font-hud);
+}
+
+.algorithm p {
+    color: var(--text-muted);
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.instructions-footer {
+    padding: 2rem;
+    border-top: 1px solid rgba(0, 255, 255, 0.2);
+    background: rgba(0, 255, 255, 0.05);
+}
+
+.quick-start, .technical-details {
+    margin-bottom: 1.5rem;
+}
+
+.quick-start h4, .technical-details h4 {
+    color: var(--hud-accent);
+    margin: 0 0 0.5rem 0;
+    font-family: var(--font-hud);
+}
+
+.quick-start p, .technical-details p {
+    color: var(--text-muted);
+    margin: 0.3rem 0;
+    font-size: 0.9rem;
+}
+
+.instruction-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn {
+    padding: 0.7rem 1.5rem;
+    border: 1px solid var(--hud-accent);
+    background: transparent;
+    color: var(--hud-accent);
+    border-radius: var(--radius);
+    font-family: var(--font-hud);
+    cursor: pointer;
+    transition: var(--transition);
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn:hover {
+    background: var(--hud-accent);
+    color: #000;
+    transform: translateY(-2px);
+}
+
+.btn.primary {
+    background: var(--hud-accent);
+    color: #000;
+    font-weight: bold;
+}
+
+.btn.primary:hover {
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+}
+
+.btn-secondary {
+    border-color: var(--text-muted);
+    color: var(--text-muted);
+}
+
+.btn-secondary:hover {
+    background: var(--text-muted);
+    color: #000;
+}
+
+.skip-btn {
+    background: rgba(255, 106, 0, 0.2);
+    border: 1px solid #ff6a00;
+    color: #ff6a00;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    font-family: var(--font-hud);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.skip-btn:hover {
+    background: #ff6a00;
+    color: #000;
+}

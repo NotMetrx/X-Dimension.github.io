@@ -1,0 +1,199 @@
+/* ===================================================
+   X-DIMENSION — Estilos para Modelo de Negocio (Orbitron Unificado)
+=================================================== */
+
+:root {
+  --bg-dark: rgba(0, 5, 15, 0.9);
+  --bg-light: rgba(255, 255, 255, 0.05);
+  --hud-accent: #00f0ff;
+  --hud-accent2: #00ffd5;
+  --text-light: #e0f7ff;
+  --text-dim: #a8c3d8;
+  --radius: 10px;
+  --font-hud: 'Orbitron', sans-serif;
+  --font-body: 'Orbitron', sans-serif; /* unificación total */
+}
+
+/* ========================
+   SECCIONES GENERALES
+======================== */
+
+.section {
+  background: var(--bg-dark);
+  border: 1px solid rgba(0, 255, 255, 0.1);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 1200px;
+  backdrop-filter: blur(8px);
+  color: var(--text-light);
+  font-family: var(--font-body);
+  letter-spacing: 0.5px;
+}
+
+.section h2 {
+  font-family: var(--font-hud);
+  color: var(--hud-accent);
+  border-bottom: 2px solid var(--hud-accent);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px var(--hud-accent);
+  font-weight: 700;
+}
+
+.section p,
+.section li {
+  font-family: var(--font-body);
+  color: var(--text-dim);
+  line-height: 1.8;
+  font-weight: 400;
+}
+
+.section ul {
+  list-style: none;
+  padding-left: 1.5rem;
+}
+
+.section ul li::before {
+  content: "✦ ";
+  color: var(--hud-accent2);
+  text-shadow: 0 0 8px var(--hud-accent2);
+}
+
+/* ========================
+   TABLAS
+======================== */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  border: 1px solid rgba(0, 255, 255, 0.15);
+  background: rgba(0, 20, 40, 0.3);
+  color: var(--text-light);
+  font-family: var(--font-body);
+  border-radius: var(--radius);
+  overflow: hidden;
+  letter-spacing: 0.5px;
+}
+
+th, td {
+  padding: 0.9rem 1.2rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+  font-family: var(--font-body);
+}
+
+th {
+  background: rgba(0, 255, 255, 0.15);
+  color: var(--hud-accent);
+  font-family: var(--font-hud);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+}
+
+tr:nth-child(even) {
+  background: rgba(0, 255, 255, 0.05);
+}
+
+tr:hover {
+  background: rgba(0, 255, 255, 0.1);
+  transition: background 0.3s ease;
+}
+
+/* ========================
+   GRID DE INGRESOS
+======================== */
+
+.revenue-model {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.revenue-item {
+  background: var(--bg-light);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid rgba(0,255,255,0.2);
+  text-align: center;
+  transition: transform 0.3s ease;
+  font-family: var(--font-body);
+}
+
+.revenue-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 240, 255, 0.2);
+}
+
+.revenue-item h3 {
+  color: var(--hud-accent);
+  margin-bottom: 1rem;
+  font-family: var(--font-hud);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.revenue-estimate {
+  display: block;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background: rgba(0, 240, 255, 0.1);
+  border-radius: var(--radius);
+  font-weight: bold;
+  color: var(--hud-accent2);
+  font-family: var(--font-hud);
+}
+
+/* ========================
+   CONCLUSIÓN Y CTA
+======================== */
+
+.contact-cta {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.contact-cta a {
+  display: inline-block;
+  padding: 0.8rem 1.6rem;
+  background: var(--hud-accent);
+  color: #000;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: var(--radius);
+  font-family: var(--font-hud);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.contact-cta a:hover {
+  background: var(--hud-accent2);
+  box-shadow: 0 0 15px var(--hud-accent2);
+  transform: scale(1.05);
+}
+
+/* ========================
+   VERSION ALTERNATIVA
+======================== */
+
+.section.alt {
+  background: rgba(0, 20, 40, 0.5);
+  border-radius: var(--radius);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.1);
+}
+
+footer.site-footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  border-top: 1px solid rgba(0, 255, 255, 0.2);
+  background: rgba(0, 15, 30, 0.8);
+  font-family: var(--font-body);
+}
